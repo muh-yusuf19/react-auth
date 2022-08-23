@@ -4,11 +4,24 @@ import Form from "./Form"
 
 const Login = () => {
     return (
-        <div>
+        <React.Fragment>
             <Navbar></Navbar>
-            <h1>Login Route</h1>
-            <Form></Form>
-        </div>
+            <div className="font-poppins container mx-auto pt-8 w-full flex flex-col md:flex-row gap-6">
+                <div className="hidden md:block md:w-1/2">
+                    <img
+                        src="/images/Home.jpg"
+                        alt="home"
+                        className="object-cover"
+                    />
+                </div>
+                <div className="w-full md:w-1/2">
+                    <h1 className="text-center text-5xl font-bold text-blue-600">
+                        Welcome ...
+                    </h1>
+                    <Form />
+                </div>
+            </div>
+        </React.Fragment>
     )
 }
 

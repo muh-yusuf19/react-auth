@@ -18,20 +18,20 @@ const User = () => {
         // Function to fetch users data
         const getUsers = async () => {
             try {
-                const response = await axiosPrivate.get(
-                    "/users", {
-                        signal: controller.signal
-                    }
-                )
+                const response = await axiosPrivate.get("/users", {
+                    signal: controller.signal,
+                })
                 console.log(response.data)
-                
-                //Store data in state 
+
+                //Store data in state
                 isMounted && setUsers(response.data)
             } catch (err) {
-
                 // Redirect to login if error not canceled
-                if(err.message !== 'canceled'){
-                    navigate('/login', { state: { from: location }, replace:true  })
+                if (err.message !== "canceled") {
+                    navigate("/", {
+                        state: { from: location },
+                        replace: true,
+                    })
                 }
                 console.log(err.message)
             }
@@ -40,10 +40,10 @@ const User = () => {
         // Call function to fetch users data
         getUsers()
 
-        // 
+        //
         return () => {
-        	isMounted = false
-        	controller.abort()
+            isMounted = false
+            controller.abort()
         }
     }, [])
 
@@ -53,11 +53,14 @@ const User = () => {
             <div className="bg-gray-200 shadow w-full rounded-lg divide-y divide-gray-200">
                 <div className="p-5">
                     <ul className="space-y-2 list-none">
-                        {users.map((data, i)=> {
+                        {users.map((data, i) => {
                             return (
-                            <li key={i} className="p-2 bg-blue-500 text-white rounded-md">
-                                {data.username}
-                            </li>
+                                <li
+                                    key={i}
+                                    className="p-2 bg-blue-500 text-white rounded-md"
+                                >
+                                    {data.username}
+                                </li>
                             )
                         })}
                     </ul>

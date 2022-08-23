@@ -3,10 +3,34 @@ import Navbar from "./Navbar"
 
 const Home = () => {
     return (
-        <div>
+        <React.Fragment>
             <Navbar></Navbar>
-            <h1>Home Route</h1>
-        </div>
+            <div className="font-poppins container px-4 mx-auto pt-8 w-full flex flex-col md:flex-row gap-6">
+                <div className="w-full md:w-1/2">
+                    <h1 className="text-7xl font-bold">
+                        <span className="text-blue-600">ReactJs</span>{" "}
+                        Authentication
+                    </h1>
+                    <div className="mt-8 text-lg text-justify">
+                        <p>
+                            Website ini merupakan contoh penerapan authentikasi
+                            menggunakan Reactjs sebagai frontend dan express js
+                            sebagai backend API. Untuk styling frontend saya
+                            menggunakan tailwindcss , sedangkan untuk backend
+                            saya juga menggunakan serta json web token untuk
+                            membuat access token dan refresh token.
+                        </p>
+                    </div>
+                </div>
+                <div className="w-full md:w-1/2">
+                    <img
+                        src="/images/Home.jpg"
+                        alt="home"
+                        className="object-cover"
+                    />
+                </div>
+            </div>
+        </React.Fragment>
     )
 }
 
