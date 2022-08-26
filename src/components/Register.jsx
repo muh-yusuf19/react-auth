@@ -10,11 +10,15 @@ const Register = () => {
 
     // State username dan password untuk login
     const [user, setUser] = useState("")
-    const [pwd, setPwd] = useState("")
     const [email, setEmail] = useState("")
+    const [pwd, setPwd] = useState("")
+    const [pwdConf, setPwdConf] = useState("")
+    const [loading, setLoading] = useState()
 
     // Ketika submit
-    const handleRegister = () => {
+    const handleRegister = (e) => {
+        e.preventDefault()
+        setLoading(true)
         try {
             const response = axios.post(
                 "/register",
@@ -27,6 +31,7 @@ const Register = () => {
 
             console.log(response.data)
             setSuccess(true)
+            setLoading(false)
             setUser("")
             setEmail("")
             setPwd("")
@@ -45,7 +50,7 @@ const Register = () => {
 
     useEffect(() => {
         setErrMsg()
-    }, [user, pwd])
+    }, [user, pwd, pwdConf])
 
     return (
         <React.Fragment>
@@ -55,10 +60,10 @@ const Register = () => {
                     <img
                         src="/images/Home.jpg"
                         alt="home"
-                        className="object-cover"
+                        className="object-cover h-3/4"
                     />
                 </div>
-                <div className="w-full md:w-1/2 flex flex-col justify-between">
+                <div className="w-full md:w-1/2">
                     <h1 className="text-center text-5xl font-bold text-blue-600">
                         Welcome ...
                     </h1>
@@ -138,27 +143,53 @@ const Register = () => {
                                         className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
                                     />
                                 </div>
+                                <div>
+                                    <label
+                                        htmlFor="password_confirm"
+                                        className="text-base text-gray-600 pb-1 block"
+                                    >
+                                        Password Confirmation
+                                    </label>
+                                    <input
+                                        type="password"
+                                        name="password_confirm"
+                                        id="password_confirm"
+                                        value={pwdConf}
+                                        onChange={(e) =>
+                                            setPwdConf(e.target.value)
+                                        }
+                                        className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
+                                    />
+                                </div>
                                 <button
+                                    disabled={loading}
                                     type="submit"
-                                    className="transition duration-200 bg-blue-500 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-block"
+                                    className="transition duration-200 bg-blue-500 disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-flex items-center justify-center"
                                 >
                                     <span className="inline-block mr-2">
                                         Register
                                     </span>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        className="w-4 h-4 inline-block"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                        />
-                                    </svg>
+                                    {loading ? (
+                                        <svg
+                                            className="animate-spin w-8 h-8 border-4 border-white border-l-gray-300 border-b-gray-300 rounded-full"
+                                            viewBox="0 0 24 24"
+                                        ></svg>
+                                    ) : (
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            className="w-4 h-4 inline-block"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                            />
+                                        </svg>
+                                    )}
                                 </button>
                             </form>
                         </div>

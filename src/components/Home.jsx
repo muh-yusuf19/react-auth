@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <React.Fragment>
             <Navbar></Navbar>
-            <div className="font-poppins container px-4 mx-auto pt-8 w-full flex flex-col md:flex-row gap-6">
+            <div className="font-poppins container px-4 mx-auto pt-8 flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2">
                     <h1 className="text-7xl font-bold">
                         <span className="text-blue-600">ReactJs</span>{" "}
@@ -23,11 +23,13 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="w-full md:w-1/2">
-                    <img
-                        src="/images/Home.jpg"
-                        alt="home"
-                        className="object-cover"
-                    />
+                    <div className="h-3/4">
+                        <img
+                            src="/images/Home.jpg"
+                            alt="home"
+                            className="object-cover h-auto"
+                        />
+                    </div>
                 </div>
             </div>
         </React.Fragment>

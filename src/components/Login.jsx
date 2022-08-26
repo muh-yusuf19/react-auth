@@ -11,7 +11,7 @@ const Login = () => {
                     <img
                         src="/images/Home.jpg"
                         alt="home"
-                        className="object-cover"
+                        className="object-cover h-3/4"
                     />
                 </div>
                 <div className="w-full md:w-1/2">

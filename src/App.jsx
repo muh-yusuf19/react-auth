@@ -15,19 +15,27 @@ function App() {
         <>
             <Routes>
                 <Route path="/" element={<Layout />}>
-
                     {/* Public Route */}
                     <Route path="/" element={<Home />}></Route>
                     <Route path="register" element={<Register />}></Route>
                     <Route path="login" element={<Login />}></Route>
                     <Route path="admin" element={<Admin />}></Route>
-                    <Route path="forgot-password" element={<ForgotPass />}></Route>
-                    <Route path="reset-password/:email" element={<ResetPass />}></Route>
+                    <Route
+                        path="forgot-password"
+                        element={<ForgotPass />}
+                    ></Route>
+                    <Route
+                        path="reset-password/:resetToken"
+                        element={<ResetPass />}
+                    ></Route>
 
                     {/* Protected Route */}
                     <Route element={<PresistLogin />}>
                         <Route element={<RequireAuth />}>
-                            <Route path="protected" element={<Protected />}></Route>
+                            <Route
+                                path="protected"
+                                element={<Protected />}
+                            ></Route>
                         </Route>
                     </Route>
                 </Route>
