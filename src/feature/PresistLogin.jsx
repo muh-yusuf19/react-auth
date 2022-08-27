@@ -9,16 +9,22 @@ const PresistLogin = () => {
     const { auth, persist } = useAuth()
 
     useEffect(() => {
+        let isMounted = true
+
         const verifyRefreshToken = async () => {
             try {
                 await refresh()
                 setIsLoading(false)
             }catch (err) {
                 console.log(err)
-            } 
+            } finally{
+                isMounted && setIsLoading(false)
+            }
         }
 
         !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false)
+
+        return () => isMounted = false
     }, [])
 
     return (<>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>)

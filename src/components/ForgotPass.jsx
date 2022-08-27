@@ -30,7 +30,8 @@ const ForgotPass = () => {
             setLoading(false)
             setEmail("")
         } catch (error) {
-            !error.response
+            setLoading(false)
+            error.response?.status == 0
                 ? setErrMsg("No Server Response")
                 : error.response?.status == 400
                 ? setErrMsg("Can't find email")
@@ -103,7 +104,7 @@ const ForgotPass = () => {
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="transition duration-200 bg-blue-500 disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-flex items-center justify-center"
+                                    className="transition duration-200 bg-blue-500 text-white text-center w-full py-2.5 rounded-lg text-base shadow-sm disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none hover:shadow-md inline-flex items-center justify-center"
                                 >
                                     <span className="inline-block mr-2">
                                         Submit

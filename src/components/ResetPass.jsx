@@ -1,48 +1,58 @@
 import Navbar from "./Navbar"
 import React, { useState, useRef, useEffect } from "react"
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import axios from "../api/axios"
+import { Formik, Form } from "formik"
+import TextInput from "./TextInput"
+import * as Yup from "yup"
+
+const resetPassSchema = Yup.object().shape({
+    password: Yup.string()
+        .min(8, "Minimum 8 Characters")
+        .required("Password is required"),
+    passwordConfirm: Yup.string()
+        .oneOf([Yup.ref("password")], "Password must match")
+        .required("Password is required"),
+})
 
 const ResetPass = () => {
     const errRef = useRef()
 
-    const [password, setPassword] = useState("")
     const [errMsg, setErrMsg] = useState()
     const [success, setSuccess] = useState(false)
-    const [loading, setLoading] = useState()
 
     let { resetToken } = useParams()
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const response = await axios.post(
+    const handleSubmit = (values, actions) => {
+        axios
+            .post(
                 `/reset-password/${resetToken}`,
-                { password: password },
+                { password: values.password },
                 {
                     headers: { "Content-Type": "application/json" },
                     withCredentials: true,
                 }
             )
-
-            console.log(response.data)
-            setLoading(false)
-            setSuccess(true)
-            setPassword("")
-        } catch (error) {
-            setLoading(false)
-            !error.response
-                ? setErrMsg("No Server Response")
-                : error.response?.status == 401
-                ? setErrMsg("Link expired")
-                : setErrMsg("Password reset canceled")
-        }
+            .then((response) => {
+                actions.setSubmitting(false)
+                actions.resetForm()
+                setSuccess(true)
+                console.log(response.data)
+            })
+            .catch((error) => {
+                actions.setSubmitting(false)
+                actions.resetForm()
+                error.response?.status == 0
+                    ? setErrMsg("No Server Response")
+                    : error.response?.status == 401
+                    ? setErrMsg("Link expired")
+                    : setErrMsg("Password reset canceled")
+            })
     }
 
     useEffect(() => {
         setErrMsg()
-    }, [password])
+    }, [errMsg])
 
     return (
         <React.Fragment>
@@ -83,54 +93,47 @@ const ResetPass = () => {
                                 </p>
                             </div>
 
-                            <form onSubmit={handleSubmit}>
-                                <label
-                                    htmlFor="passowrd"
-                                    className="font-semibold text-base text-gray-600 pb-1 block"
-                                >
-                                    New Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                    value={password}
-                                    required
-                                    className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none shadow-md"
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="transition duration-200 bg-blue-500 disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-flex items-center justify-center"
-                                >
-                                    <span className="inline-block mr-2">
-                                        Submit
-                                    </span>
-                                    {loading ? (
-                                        <svg
-                                            className="animate-spin w-8 h-8 border-4 border-white border-l-gray-300 border-b-gray-300 rounded-full"
-                                            viewBox="0 0 24 24"
-                                        ></svg>
-                                    ) : (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            className="w-4 h-4 inline-block"
+                            <Formik
+                                initialValues={{
+                                    passord: "",
+                                    passswordConfirm: "",
+                                }}
+                                validationSchema={resetPassSchema}
+                                onSubmit={handleSubmit}
+                            >
+                                {(props) => (
+                                    <Form>
+                                        <TextInput
+                                            label="Password"
+                                            name="password"
+                                            type="password"
+                                        />
+                                        <TextInput
+                                            label="Password Confirmation"
+                                            name="passwordConfirm"
+                                            type="password"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={
+                                                !props.isValid ||
+                                                props.isSubmitting
+                                            }
+                                            className="transition duration-200 bg-blue-500 text-white text-center w-full py-2.5 rounded-lg text-base shadow-sm disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none hover:shadow-md inline-flex items-center justify-center"
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                            />
-                                        </svg>
-                                    )}
-                                </button>
-                            </form>
+                                            <span className="inline-block mr-2">
+                                                Submit
+                                            </span>
+                                            {props.isSubmitting ? (
+                                                <svg
+                                                    className="animate-spin w-8 h-8 border-4 border-white border-l-gray-300 border-b-gray-300 rounded-full"
+                                                    viewBox="0 0 24 24"
+                                                ></svg>
+                                            ) : null}
+                                        </button>
+                                    </Form>
+                                )}
+                            </Formik>
                         </div>
                     )}
                 </div>

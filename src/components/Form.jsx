@@ -138,7 +138,7 @@ const Form = () => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="transition duration-200 bg-blue-500 disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-flex items-center justify-center"
+                        className="transition duration-200 bg-blue-500 disabled:bg-blue-300 text-white text-center w-full py-2.5 rounded-lg text-base shadow-sm focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none hover:shadow-md inline-flex items-center justify-center"
                     >
                         <span className="inline-block mr-2">Login</span>
                         {loading ? (

@@ -1,56 +1,66 @@
 import React, { useEffect, useRef, useState } from "react"
-import useAuth from "../hooks/useAuth"
 import axios from "../api/axios"
-import { useNavigate, useLocation, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import Navbar from "./Navbar"
+import { Formik, Form } from "formik"
+import TextInput from "./TextInput"
+import * as Yup from "yup"
+
+const testSchema = Yup.object().shape({
+    username: Yup.string()
+        .min(10, "Min 10 Character")
+        .max(20, "Max 10 Character")
+        .required("Username required"),
+    email: Yup.string().email("Invalid email").required("Email are required"),
+    password: Yup.string().required("Password required"),
+    passwordConfirm: Yup.string()
+        .required("Password required")
+        .oneOf([Yup.ref("password")], "Password not match"),
+})
 
 const Register = () => {
     // Ref object
     const errRef = useRef()
 
-    // State username dan password untuk login
-    const [user, setUser] = useState("")
-    const [email, setEmail] = useState("")
-    const [pwd, setPwd] = useState("")
-    const [pwdConf, setPwdConf] = useState("")
-    const [loading, setLoading] = useState()
-
-    // Ketika submit
-    const handleRegister = (e) => {
-        e.preventDefault()
-        setLoading(true)
-        try {
-            const response = axios.post(
-                "/register",
-                { user: user, pwd: pwd, email: email },
-                {
-                    headers: { "Content-Type": "application/json" },
-                    withCredentials: true,
-                }
-            )
-
-            console.log(response.data)
-            setSuccess(true)
-            setLoading(false)
-            setUser("")
-            setEmail("")
-            setPwd("")
-        } catch (error) {
-            !error.response
-                ? setErrMsg("No Server Response")
-                : error.response?.status == 409
-                ? setErrMsg("username or email already exist")
-                : setErrMsg("Cannot Register")
-        }
-    }
-
     // Satate error message
     const [errMsg, setErrMsg] = useState()
     const [success, setSuccess] = useState(false)
 
+    // Ketika submit
+    const handleRegister = (values, actions) => {
+        axios
+            .post(
+                "/register",
+                {
+                    user: values.username,
+                    pwd: values.password,
+                    email: values.email,
+                },
+                {
+                    headers: { "Content-type": "application/json" },
+                    withCredentials: true,
+                }
+            )
+            .then((response) => {
+                actions.setSubmitting(false)
+                actions.resetForm()
+                setSuccess(true)
+                console.log(response.data)
+            })
+            .catch((error) => {
+                actions.setSubmitting(false)
+                actions.resetForm()
+                error.response.status == 0
+                    ? setErrMsg("No Server Response")
+                    : error.response?.status == 409
+                    ? setErrMsg("username or email already exist")
+                    : setErrMsg("Cannot Register")
+            })
+    }
+
     useEffect(() => {
         setErrMsg()
-    }, [user, pwd, pwdConf])
+    }, [success])
 
     return (
         <React.Fragment>
@@ -90,108 +100,59 @@ const Register = () => {
                                     {errMsg}
                                 </p>
                             </div>
-                            <form onSubmit={handleRegister}>
-                                <div>
-                                    <label
-                                        htmlFor="username"
-                                        className="text-base text-gray-600 pb-1 block"
-                                    >
-                                        Username
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        id="username"
-                                        value={user}
-                                        onChange={(e) =>
-                                            setUser(e.target.value)
-                                        }
-                                        className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="email"
-                                        className="text-base text-gray-600 pb-1 block"
-                                    >
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        value={email}
-                                        onChange={(e) =>
-                                            setEmail(e.target.value)
-                                        }
-                                        className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="password"
-                                        className="text-base text-gray-600 pb-1 block"
-                                    >
-                                        Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        id="password"
-                                        value={pwd}
-                                        onChange={(e) => setPwd(e.target.value)}
-                                        className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        htmlFor="password_confirm"
-                                        className="text-base text-gray-600 pb-1 block"
-                                    >
-                                        Password Confirmation
-                                    </label>
-                                    <input
-                                        type="password"
-                                        name="password_confirm"
-                                        id="password_confirm"
-                                        value={pwdConf}
-                                        onChange={(e) =>
-                                            setPwdConf(e.target.value)
-                                        }
-                                        className="border rounded-lg px-3 py-2 mt-1 mb-5 text-base w-full focus:outline-none"
-                                    />
-                                </div>
-                                <button
-                                    disabled={loading}
-                                    type="submit"
-                                    className="transition duration-200 bg-blue-500 disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-base shadow-sm hover:shadow-md text-center inline-flex items-center justify-center"
-                                >
-                                    <span className="inline-block mr-2">
-                                        Register
-                                    </span>
-                                    {loading ? (
-                                        <svg
-                                            className="animate-spin w-8 h-8 border-4 border-white border-l-gray-300 border-b-gray-300 rounded-full"
-                                            viewBox="0 0 24 24"
-                                        ></svg>
-                                    ) : (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                            className="w-4 h-4 inline-block"
+                            <Formik
+                                initialValues={{
+                                    username: "",
+                                    email: "",
+                                    password: "",
+                                    passwordConfirm: "",
+                                }}
+                                validationSchema={testSchema}
+                                onSubmit={handleRegister}
+                            >
+                                {(props) => (
+                                    <Form>
+                                        <TextInput
+                                            label="Username"
+                                            name="username"
+                                            type="text"
+                                        />
+                                        <TextInput
+                                            label="Email"
+                                            name="email"
+                                            type="email"
+                                        />
+                                        <TextInput
+                                            label="Password"
+                                            name="password"
+                                            type="password"
+                                        />
+                                        <TextInput
+                                            label="Password Confirm"
+                                            name="passwordConfirm"
+                                            type="password"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={
+                                                !props.isValid ||
+                                                props.isSubmitting
+                                            }
+                                            className="transition duration-200 bg-blue-500 text-white text-center w-full py-2.5 rounded-lg text-base shadow-sm disabled:bg-blue-300 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 focus:outline-none hover:shadow-md inline-flex items-center justify-center"
                                         >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                strokeWidth="2"
-                                                d="M17 8l4 4m0 0l-4 4m4-4H3"
-                                            />
-                                        </svg>
-                                    )}
-                                </button>
-                            </form>
+                                            <span className="inline-block mr-2">
+                                                Submit
+                                            </span>
+                                            {props.isSubmitting ? (
+                                                <svg
+                                                    className="animate-spin w-8 h-8 border-4 border-white border-l-gray-300 border-b-gray-300 rounded-full"
+                                                    viewBox="0 0 24 24"
+                                                ></svg>
+                                            ) : null}
+                                        </button>
+                                    </Form>
+                                )}
+                            </Formik>
                         </div>
                     )}
 

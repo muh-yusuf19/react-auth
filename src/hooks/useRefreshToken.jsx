@@ -21,13 +21,6 @@ const useRefreshToken = () => {
             console.log(err)
         }
     }
-    // const refresh = () => {
-    //     axios
-    //         .get("/api/auth/refreshToken", { withCredentials: true })
-    //         .then((res) => {
-    //             console.log(res)
-    //         })
-    // }
 
     return refresh
 }

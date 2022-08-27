@@ -10,16 +10,8 @@ const Navbar = () => {
     const navigate = useNavigate()
 
     const signOut = async () => {
-        // console.log("Logout")
         await logout()
-        setAuth(null)
         navigate("/", { state: { from: location }, replace: true })
-        // try{
-        //     const response = await axios.get('/logout', { withCredentials: true })
-        //     console.log(response)
-        // }catch(err){
-        //     console.log(err)
-        // }
     }
 
     return (
