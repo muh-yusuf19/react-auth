@@ -12,9 +12,13 @@ const useRefreshToken = () => {
             })
 
             setAuth((prev) => {
-                console.log(prev)
+                console.log(prev.accessToken)
                 console.log(response.data.accessToken)
-                return { ...prev, admin:response.data.admin, accessToken: response.data.accessToken }
+                return {
+                    ...prev,
+                    admin: response.data.admin,
+                    accessToken: response.data.accessToken,
+                }
             })
             return response.data.accessToken
         } catch (err) {

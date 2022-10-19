@@ -43,8 +43,8 @@ const Form = () => {
             const response = await axios.post(
                 LOGIN_URL,
                 {
-                    user: user,
-                    pwd: pwd,
+                    user,
+                    pwd,
                 },
                 {
                     headers: { "Content-Type": "application/json" },
@@ -63,11 +63,9 @@ const Form = () => {
             setLoading(false)
         } catch (error) {
             setLoading(false)
-            !error.response
+            !error.response?.data
                 ? setErrMsg("No Server Response")
-                : error.response?.status == 401
-                ? setErrMsg("Wrong Credentials")
-                : setErrMsg("Cannot Login")
+                : setErrMsg(error.response.data?.message)
         }
     }
 

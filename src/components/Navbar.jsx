@@ -5,13 +5,13 @@ import useLogout from "../hooks/useLogout"
 
 const Navbar = () => {
     const [openNav, setOpenNav] = useState(false)
-    const { auth, setAuth } = useAuth()
+    const { auth } = useAuth()
     const logout = useLogout()
     const navigate = useNavigate()
 
     const signOut = async () => {
+        navigate("/")
         await logout()
-        navigate("/", { state: { from: location }, replace: true })
     }
 
     return (
@@ -54,13 +54,15 @@ const Navbar = () => {
                 <p className="ml-4 md:ml-0 md:px-4 py-2 mt-2 md:mt-0 font-medium transition transfrom duration-150 md:mt-0 hover:-translate-y-2 focus:outline-none focus:border-2 focus:border-black">
                     <Link to="/">Home</Link>
                 </p>
-                <p className="ml-4 md:ml-0 md:px-4 py-2 mt-2 md:mt-0 font-medium transition transfrom duration-150 md:mt-0 md:ml-4 hover:-translate-y-2 focus:outline-none focus:border-2 focus:border-black">
-                    <Link to="/register">Register</Link>
-                </p>
                 {!auth?.accessToken && (
-                    <p className="ml-4 md:ml-0 md:px-4 py-2 mt-2 md:mt-0 font-medium transition transfrom duration-150 md:mt-0 md:ml-4 hover:-translate-y-2 focus:outline-none focus:border-2 focus:border-black">
-                        <Link to="/login">Login</Link>
-                    </p>
+                    <>
+                        <p className="ml-4 md:ml-0 md:px-4 py-2 mt-2 md:mt-0 font-medium transition transfrom duration-150 md:mt-0 md:ml-4 hover:-translate-y-2 focus:outline-none focus:border-2 focus:border-black">
+                            <Link to="/login">Login</Link>
+                        </p>
+                        <p className="ml-4 md:ml-0 md:px-4 py-2 mt-2 md:mt-0 font-medium transition transfrom duration-150 md:mt-0 md:ml-4 hover:-translate-y-2 focus:outline-none focus:border-2 focus:border-black">
+                            <Link to="/register">Register</Link>
+                        </p>
+                    </>
                 )}
 
                 {auth?.accessToken && (

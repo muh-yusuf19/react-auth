@@ -7,11 +7,11 @@ const Home = () => {
             <Navbar></Navbar>
             <div className="font-poppins container px-4 mx-auto pt-8 flex flex-col md:flex-row gap-6">
                 <div className="w-full md:w-1/2">
-                    <h1 className="text-7xl font-bold">
+                    <h1 className="text-4xl lg:text-5xl xl:text-7xl font-bold">
                         <span className="text-blue-600">ReactJs</span>{" "}
                         Authentication
                     </h1>
-                    <div className="mt-8 text-lg text-justify">
+                    <div className="mt-8 text-base lg:text-lg text-justify">
                         <p>
                             Website ini merupakan contoh penerapan authentikasi
                             menggunakan Reactjs sebagai frontend dan express js
