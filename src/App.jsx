@@ -7,7 +7,6 @@ import Register from "./components/Register"
 import Admin from "./components/Admin"
 import ForgotPass from "./components/ForgotPass"
 import ResetPass from "./components/ResetPass"
-import Formit from "./components/Formit"
 import RequireAuth from "./feature/RequireAuth"
 import PresistLogin from "./feature/PresistLogin"
 
@@ -21,13 +20,22 @@ function App() {
                     <Route path="register" element={<Register />}></Route>
                     <Route path="login" element={<Login />}></Route>
                     <Route path="admin" element={<Admin />}></Route>
-                    <Route path="forgot-password" element={<ForgotPass />}></Route>
-                    <Route path="reset-password/:resetToken" element={<ResetPass />}></Route>
+                    <Route
+                        path="forgot-password"
+                        element={<ForgotPass />}
+                    ></Route>
+                    <Route
+                        path="reset-password/:resetToken"
+                        element={<ResetPass />}
+                    ></Route>
 
                     {/* Protected Route */}
                     <Route element={<PresistLogin />}>
                         <Route element={<RequireAuth />}>
-                            <Route path="protected" element={<Protected />}></Route>
+                            <Route
+                                path="protected"
+                                element={<Protected />}
+                            ></Route>
                         </Route>
                     </Route>
                 </Route>

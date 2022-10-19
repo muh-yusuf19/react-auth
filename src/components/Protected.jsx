@@ -7,11 +7,11 @@ import { Link } from "react-router-dom"
 const Protected = () => {
     // const refresh = useRefreshToken()
 
-    const cookie = () => {
-        axios.get("/refresh", { withCredentials: true }).then((res) => {
-            console.log(res.data)
-        })
-    }
+    // const cookie = () => {
+    //     axios.get("/refresh", { withCredentials: true }).then((res) => {
+    //         console.log(res.data)
+    //     })
+    // }
 
     return (
         <React.Fragment>
@@ -23,12 +23,12 @@ const Protected = () => {
                         <Link to="/admin">Admin</Link>
                     </li>
                 </ul>
-                <button
+                {/* <button
                     onClick={cookie}
                     className="p-4 bg-blue-500 text-white text-base"
                 >
                     Refresh
-                </button>
+                </button> */}
             </div>
         </React.Fragment>
     )

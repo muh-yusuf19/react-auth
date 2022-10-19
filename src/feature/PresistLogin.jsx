@@ -14,20 +14,23 @@ const PresistLogin = () => {
         const verifyRefreshToken = async () => {
             try {
                 await refresh()
-                setIsLoading(false)
-            }catch (err) {
+            } catch (err) {
                 console.log(err)
-            } finally{
+            } finally {
                 isMounted && setIsLoading(false)
             }
         }
 
         !auth?.accessToken ? verifyRefreshToken() : setIsLoading(false)
 
-        return () => isMounted = false
+        return () => (isMounted = false)
     }, [])
 
-    return (<>{!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}</>)
+    return (
+        <>
+            {!persist ? <Outlet /> : isLoading ? <p>Loading...</p> : <Outlet />}
+        </>
+    )
 }
 
 export default PresistLogin
